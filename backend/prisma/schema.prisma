@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId        BigInt      @id @default(autoincrement()) // primary key
+  email         String      @unique
+  name          String
+  gitHubProfile String?
+  createdAt     DateTime @default(now())
+}
+
+enum DeploymentStatus{
+  Ready
+  Error
+  Building
+  Queued
+  Canceled
+}
+
+model Project {
+  projectId         BigInt      @id @default(autoincrement())
+  projectName       String
+  deploymentStatus  DeploymentStatus
+  domainUrl         String?
+  githubUrl         String?    
+  userId            BigInt  
+  user              User @relation(fields: [userId], references: [userId])
+  createdAt         DateTime @default(now())
+}
+
+model Deployment {
+  deploymentId        BigInt      @id @default(autoincrement())
+  deploymentDate      DateTime @default(now())
+  deploymentStatus    DeploymentStatus
+  commitId            String?
+  startedAt           DateTime @default(now())
+  endedAt             DateTime? @default(now())    
+  sourcePath          String?
+  outputPath          String?
+  projectId           BigInt  
+  project             Project @relation(fields: [projectId], references: [projectId])
+}
+
+enum DeploymentLogStatus{
+  Completed
+  Error
+  Warning
+}
+
+model DeploymentLogs {
+  logId         BigInt      @id @default(autoincrement())
+  logMessage    String
+  errorMessage  String?
+  status        DeploymentLogStatus
+  timeStamp     DateTime @default(now())
+  deploymentId  BigInt  
+  deployment    Deployment @relation(fields: [deploymentId], references: [deploymentId])
+}
