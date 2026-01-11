@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { Appbar } from "../components/Appbar";
 import { Hero } from "../components/Hero";
 import { PrimaryBtn } from "../components/PrimaryBtn";
 
 export function Landingpage(){
+    const navigate = useNavigate();
     return <div className="h-screen p-8">
         <Appbar/>
         <div className="mt-17">
@@ -21,7 +23,12 @@ export function Landingpage(){
                     Vercel doesn't stand a chance!</span>
             </div>
             <div className="flex justify-center mt-6 gap-5">
-                <PrimaryBtn/>
+                <div className="cursor-pointer"
+                    onClick={() => {
+                        navigate("/dashboard");
+                    }}>
+                    <PrimaryBtn/>
+                </div>
                 <div className="text-green-500/70 bg-green-950/80 p-1 px-2 rounded-full text-xs font-semibold">
                     Demo
                 </div>
