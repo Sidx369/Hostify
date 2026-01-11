@@ -19,10 +19,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@prisma/client": "^6.19.1",
+    "@prisma/client": "^7.2.0",
     "@types/cors": "^2.8.19",
     "cors": "^2.8.5",
     "express": "^5.2.1",
-    "prisma": "^6.19.1"
+    "prisma": "^7.2.0"
   }
 }

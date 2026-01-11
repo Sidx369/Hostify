@@ -1,7 +1,18 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { useGitUser } from "../store";
+import { useEffect } from "react";
 
 export function Appbar(){
-    const { loginWithRedirect } = useAuth0();
+    const { loginWithRedirect, user, isLoading } = useAuth0();
+    console.log("Loading status: ", isLoading);
+    console.log("current user", user);
+
+    const gitUserSet = useGitUser((state) => state.gitUserSet);
+    useEffect(() => {
+        if(user) {
+            gitUserSet(user);
+        }
+    }, [user]);
 
     return <div className="flex justify-between items-center text-white">
         <div>Hostify🚀</div>
@@ -11,6 +22,8 @@ export function Appbar(){
             <div>Resources</div>
             <div>Pricing</div>
         </div>
-        <div className="bg-white/20 p-1 text-xs px-3 rounded-full" onClick={() => loginWithRedirect()}>Login</div>
+        <div className="bg-white/20 p-1 text-xs px-3 rounded-full" onClick={() => loginWithRedirect({appState: {
+            returnTo: "/dashboard"
+        }})}>Login</div>
     </div>
 }
